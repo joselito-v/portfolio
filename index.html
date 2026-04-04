@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joselito Villarta, CPA | Professional Portfolio</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0f172a; /* Deep Navy */
+            --accent-color: #2563eb; /* Professional Blue */
+            --text-main: #334155;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 12rem 2rem 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Sections General */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .skills-container {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: 0.3rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: var(--transition);
+            border: 1px solid #f1f5f9;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.08);
+        }
+
+        .portfolio-content {
+            padding: 2rem;
+        }
+
+        .portfolio-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .portfolio-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Upwork History Section */
+        .history-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .job-date {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .job-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .upwork-profile-card {
+            background: linear-gradient(135deg, #14a800 0%, #0f8000 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .upwork-profile-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .upwork-btn {
+            background: white;
+            color: #14a800;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+
+        .upwork-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+            background: var(--bg-white);
+            padding: 5rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 5rem;
+        }
+
+        .contact-email {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 2rem 0;
+            display: block;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Can be toggled with JS */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem 0;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 1rem;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="nav-container">
+            <a href="#" class="logo">Joselito<span>.</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Websites</a></li>
+                <li><a href="#experience">Work History</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Joselito Villarta, CPA</h1>
+        <h2>Accounting Professional, College Instructor, and Web Developer</h2>
+        <div>
+            <a href="#portfolio" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>Hello! I am Joselito Villarta, a Certified Public Accountant (CPA) and college instructor with a deep passion for web development. I bridge the gap between complex financial systems and modern digital solutions.</p>
+                <p>As the founder of VnVCPAs, I understand the intricate needs of businesses. Whether it is teaching the next generation of accountants or developing comprehensive cloud accounting systems, I bring analytical rigor and creative problem-solving to every project.</p>
+            </div>
+            <div class="skills-container">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Core Expertise</h3>
+                <span class="skill-tag">Financial Accounting</span>
+                <span class="skill-tag">Web Development</span>
+                <span class="skill-tag">HTML5 / CSS3</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Cloud Accounting Software</span>
+                <span class="skill-tag">UI/UX Design</span>
+                <span class="skill-tag">LMS Courseware</span>
+                <span class="skill-tag">Process Automation</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <h2 class="section-title">Websites & Projects</h2>
+        <div class="portfolio-grid">
+            
+            <div class="portfolio-card">
+                <div class="portfolio-content">
+                    <h3 class="portfolio-title">OneBook (Cloud Accounting)</h3>
+                    <p class="portfolio-desc">A comprehensive cloud accounting system designed for modern businesses, streamlining financial records and reporting.</p>
+                    <a href="#" class="portfolio-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-content">
+                    <h3 class="portfolio-title">Interactive LMS Courseware</h3>
+                    <p class="portfolio-desc">HTML-based learning management tools and modules created for accounting students, featuring quizzes and interactive activities.</p>
+                    <a href="#" class="portfolio-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-content">
+                    <h3 class="portfolio-title">VnVCPAs Firm Website</h3>
+                    <p class="portfolio-desc">The digital storefront for professional accounting services, showcasing service offerings and client resources.</p>
+                    <a href="#" class="portfolio-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="section-title">Upwork Work History</h2>
+        
+        <div class="history-container">
+            
+            <div class="upwork-profile-card">
+                <h3>Top Rated Freelancer on Upwork</h3>
+                <p>Delivering high-quality accounting and web development solutions to clients globally.</p>
+                <a href="https://www.upwork.com/freelancers/joselitolvillartacpa" target="_blank" rel="noopener noreferrer" class="upwork-btn">
+                    <i class="fas fa-external-link-alt"></i> View Full Upwork Profile
+                </a>
+            </div>
+
+            <div class="timeline-item">
+                <div class="job-title">Financial Consultant & Developer</div>
+                <span class="job-date">Recent Project</span>
+                <p class="job-desc">Developed custom financial reporting dashboards and integrated web-based solutions for tracking daily ledgers.</p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="job-title">Accounting Systems Integration</div>
+                <span class="job-date">Past Project</span>
+                <p class="job-desc">Assisted in migrating legacy financial data into modern cloud accounting frameworks, ensuring zero data loss and compliance with accounting standards.</p>
+            </div>
+            
+            </div>
+    </section>
+
+    <section id="contact">
+        <div class="contact">
+            <h2 class="section-title" style="margin-bottom: 1rem;">Let's Work Together</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem;">Currently available for freelance opportunities and consulting.</p>
+            <a href="mailto:your.email@example.com" class="contact-email">your.email@example.com</a>
+            <a href="https://www.upwork.com/freelancers/joselitolvillartacpa" target="_blank" class="btn btn-primary">Hire me on Upwork</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Joselito Villarta. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
