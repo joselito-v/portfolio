@@ -1,30 +1,33 @@
-// --- work-history.js (Work History Module)
+// --- work-history.js (Work History Module) ---
 import { db } from './firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 let historyData = [];
 let currentFilter = 'All';
+let currentStatusFilter = 'All';
 let sortDesc = true; 
 
 export async function init(containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = `
         <section>
-            <h2 class="section-title">Upwork & Work History</h2>
-            
-            <div class="filter-container" id="history-filters">
-                <button class="filter-btn active" data-filter="All">ALL</button>
-                <button class="filter-btn" data-filter="Client Work">CLIENT WORK</button>
-                <button class="filter-btn" data-filter="My Products">MY PRODUCTS</button>
+            <h2 class="section-title">Work History</h2>
+
+            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div id="status-filters" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-status="All">All Status</button>
+                    <button class="filter-btn" data-status="In Progress">In Progress</button>
+                    <button class="filter-btn" data-status="Completed">Completed</button>
+                </div>
+
+                <div class="sort-container" style="margin-bottom: 0;">
+                    <button class="sort-btn" id="sortToggle">
+                        Sort by Date <i class="fas fa-arrow-down" id="sortIcon"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="sort-container">
-                <button class="sort-btn" id="sortToggle">
-                    Sort by Date <i class="fas fa-arrow-down" id="sortIcon"></i>
-                </button>
-            </div>
-
-            <div class="grid-container" id="history-grid">
+            <div id="history-grid" style="display: flex; flex-direction: column; gap: 2rem;">
                 <p style="text-align:center; width:100%;">Loading history...</p>
             </div>
         </section>
@@ -50,12 +53,21 @@ function renderHistory() {
     const grid = document.getElementById('history-grid');
     grid.innerHTML = '';
 
-    // Filter
-    let processed = currentFilter === 'All' 
-        ? [...historyData] 
-        : historyData.filter(item => item.category === currentFilter);
+    let processed = historyData.filter(item => {
+        const categoryMatch = currentFilter === 'All' ? true : item.category === currentFilter;
+        
+        let statusMatch = true;
+        const isOngoing = item.endDate && item.endDate.toLowerCase().includes('in progress');
+        
+        if (currentStatusFilter === 'In Progress') {
+            statusMatch = isOngoing;
+        } else if (currentStatusFilter === 'Completed') {
+            statusMatch = !isOngoing;
+        }
+        
+        return categoryMatch && statusMatch;
+    });
 
-    // Sort: Ongoing first, then by endDate
     processed.sort((a, b) => {
         if(a.endDate === 'In Progress' && b.endDate !== 'In Progress') return -1;
         if(b.endDate === 'In Progress' && a.endDate !== 'In Progress') return 1;
@@ -72,6 +84,34 @@ function renderHistory() {
     }
 
     processed.forEach(item => {
+        let formattedSolution = '';
+        if (item.solution) {
+            const solutionArray = item.solution.split('\n').filter(line => line.trim() !== "");
+            
+            const listItems = solutionArray.map(line => {
+                const parts = line.split(':');
+                if (parts.length > 1) {
+                    const boldPart = parts[0];
+                    const restPart = parts.slice(1).join(':');
+                    return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</li>`;
+                } else {
+                    return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;">${line.trim()}</li>`;
+                }
+            }).join('');
+            
+            formattedSolution = `<ul style="margin-top: 0.5rem; color: var(--text-light); font-size: 0.95rem;">${listItems}</ul>`;
+        }
+
+        let feedbackHtml = '';
+        if (item.feedback) {
+            feedbackHtml = `
+                <div class="card-section">
+                    <span class="card-label">Client Feedback</span>
+                    <div class="card-quote">"${item.feedback}"</div>
+                </div>
+            `;
+        }
+
         grid.innerHTML += `
             <div class="data-card">
                 <div class="card-header">
@@ -95,14 +135,10 @@ function renderHistory() {
 
                 <div class="card-section">
                     <span class="card-label">The Solution</span>
-                    <p class="card-text">${item.solution}</p>
+                    ${formattedSolution}
                 </div>
 
-                ${item.feedback ? `
-                <div class="card-section">
-                    <span class="card-label">Client Feedback</span>
-                    <div class="card-quote">"${item.feedback}"</div>
-                </div>` : ''}
+                ${feedbackHtml}
             </div>
         `;
     });
@@ -114,6 +150,15 @@ function setupControls() {
             document.querySelectorAll('#history-filters .filter-btn').forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             currentFilter = e.target.getAttribute('data-filter');
+            renderHistory();
+        });
+    });
+
+    document.querySelectorAll('#status-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#status-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentStatusFilter = e.target.getAttribute('data-status');
             renderHistory();
         });
     });
