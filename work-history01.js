@@ -3,7 +3,6 @@ import { db } from './firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 let historyData = [];
-let currentFilter = 'All';
 let currentStatusFilter = 'All';
 let sortDesc = true; 
 
@@ -13,16 +12,15 @@ export async function init(containerId) {
         <section>
             <h2 class="section-title">Work History</h2>
 
-            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div id="status-filters" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div id="status-filters" style="display: flex; gap: 1rem 0.2rem; flex-wrap: wrap;">
                     <button class="filter-btn active" data-status="All">All Status</button>
                     <button class="filter-btn" data-status="In Progress">In Progress</button>
                     <button class="filter-btn" data-status="Completed">Completed</button>
                 </div>
 
-                <div class="sort-container" style="margin-bottom: 0;">
-                    <button class="sort-btn" id="sortToggle">
-                        Sort by Date <i class="fas fa-arrow-down" id="sortIcon"></i>
+                <div class="sort-container" style="margin-bottom: 0; margin-left: auto;">
+                    <button class="sort-btn" id="sortToggle"><i class="fas fa-arrow-down" id="sortIcon">Date</i>
                     </button>
                 </div>
             </div>
@@ -54,8 +52,6 @@ function renderHistory() {
     grid.innerHTML = '';
 
     let processed = historyData.filter(item => {
-        const categoryMatch = currentFilter === 'All' ? true : item.category === currentFilter;
-        
         let statusMatch = true;
         const isOngoing = item.endDate && item.endDate.toLowerCase().includes('in progress');
         
@@ -65,7 +61,7 @@ function renderHistory() {
             statusMatch = !isOngoing;
         }
         
-        return categoryMatch && statusMatch;
+        return statusMatch;
     });
 
     processed.sort((a, b) => {
@@ -145,15 +141,6 @@ function renderHistory() {
 }
 
 function setupControls() {
-    document.querySelectorAll('#history-filters .filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('#history-filters .filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentFilter = e.target.getAttribute('data-filter');
-            renderHistory();
-        });
-    });
-
     document.querySelectorAll('#status-filters .filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('#status-filters .filter-btn').forEach(b => b.classList.remove('active'));
