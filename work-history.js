@@ -6,9 +6,23 @@ let historyData = [];
 let currentStatusFilter = 'All';
 let sortDesc = true; 
 
-// Helper function to format text with newline split and bolding before colons
+// Helper function to format text with newline split, bolding before colons, or raw HTML
 function formatBulletPoints(text) {
     if (!text) return '<p class="card-text"></p>';
+    
+    // Check if the user inputted raw HTML tags for paragraphs or lists
+    if (/<(?:p|ul|ol|li)[^>]*>/i.test(text)) {
+        return `<div class="html-content" style="color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem;">
+                    <style>
+                        .html-content p { margin-bottom: 0.8rem; }
+                        .html-content ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.8rem; }
+                        .html-content ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 0.8rem; }
+                        .html-content li { margin-bottom: 0.3rem; }
+                        .html-content ul ul, .html-content ol ol, .html-content ul ol, .html-content ol ul { margin-top: 0.3rem; margin-bottom: 0; }
+                    </style>
+                    ${text}
+                </div>`;
+    }
     
     // Check if there are actual newlines, if not, just format as a single paragraph but check for colon
     if (!text.includes('\n')) {
