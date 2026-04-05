@@ -10,10 +10,6 @@ export function init(containerId) {
                 <a href="mailto:jlvillarta@live.com.ph" style="font-size: 1.5rem; color: var(--primary-color); font-weight: 600; margin: 2rem 0; display: block; text-decoration: none;">
                     jlvillarta@live.com.ph
                 </a>
-                
-                <a href="https://www.upwork.com/freelancers/joselitolvillartacpa" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background: linear-gradient(135deg, #14a800 0%, #0f8000 100%); border:none;">
-                    <i class="fas fa-external-link-alt"></i> Hire me on Upwork
-                </a>
             </div>
         </section>
     `;
