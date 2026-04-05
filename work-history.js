@@ -6,6 +6,36 @@ let historyData = [];
 let currentStatusFilter = 'All';
 let sortDesc = true; 
 
+// Helper function to format text with newline split and bolding before colons
+function formatBulletPoints(text) {
+    if (!text) return '<p class="card-text"></p>';
+    
+    // Check if there are actual newlines, if not, just format as a single paragraph but check for colon
+    if (!text.includes('\n')) {
+        const parts = text.split(':');
+        if (parts.length > 1) {
+            const boldPart = parts[0];
+            const restPart = parts.slice(1).join(':');
+            return `<p class="card-text"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</p>`;
+        }
+        return `<p class="card-text">${text}</p>`;
+    }
+
+    const array = text.split('\n').filter(line => line.trim() !== "");
+    const listItems = array.map(line => {
+        const parts = line.split(':');
+        if (parts.length > 1) {
+            const boldPart = parts[0];
+            const restPart = parts.slice(1).join(':');
+            return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</li>`;
+        } else {
+            return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;">${line.trim()}</li>`;
+        }
+    }).join('');
+    
+    return `<ul style="margin-top: 0.5rem; color: var(--text-light); font-size: 0.95rem;">${listItems}</ul>`;
+}
+
 export async function init(containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = `
@@ -80,23 +110,9 @@ function renderHistory() {
     }
 
     processed.forEach(item => {
-        let formattedSolution = '';
-        if (item.solution) {
-            const solutionArray = item.solution.split('\n').filter(line => line.trim() !== "");
-            
-            const listItems = solutionArray.map(line => {
-                const parts = line.split(':');
-                if (parts.length > 1) {
-                    const boldPart = parts[0];
-                    const restPart = parts.slice(1).join(':');
-                    return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</li>`;
-                } else {
-                    return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;">${line.trim()}</li>`;
-                }
-            }).join('');
-            
-            formattedSolution = `<ul style="margin-top: 0.5rem; color: var(--text-light); font-size: 0.95rem;">${listItems}</ul>`;
-        }
+        // Use the new helper function for both problem and solution
+        const formattedProblem = formatBulletPoints(item.problem);
+        const formattedSolution = formatBulletPoints(item.solution);
 
         let feedbackHtml = '';
         if (item.feedback) {
@@ -126,7 +142,7 @@ function renderHistory() {
                 
                 <div class="card-section">
                     <span class="card-label">The Problem</span>
-                    <p class="card-text">${item.problem}</p>
+                    ${formattedProblem}
                 </div>
 
                 <div class="card-section">
