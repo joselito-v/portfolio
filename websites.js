@@ -42,8 +42,8 @@ export async function init(containerId) {
         <section>
             <h2 class="section-title">Websites & Projects</h2>
             
-            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div id="website-filters" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div id="website-filters" style="display: flex; gap: 1rem 0.2rem; flex-wrap: wrap;">
                     <button class="filter-btn active" data-filter="All">All Websites</button>
                     <button class="filter-btn" data-filter="Client Websites">Client Websites</button>
                     <button class="filter-btn" data-filter="My Websites">My Websites</button>
