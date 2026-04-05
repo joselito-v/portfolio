@@ -12,7 +12,7 @@ export async function init(containerId) {
         <section>
             <h2 class="section-title">Work History</h2>
 
-            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="position: sticky; top: 75px; background-color: var(--bg-light); z-index: 90; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.1rem;">
                 <div id="status-filters" style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <button class="filter-btn active" data-status="All">All Status</button>
                     <button class="filter-btn" data-status="In Progress">In Progress</button>
