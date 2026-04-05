@@ -19,7 +19,7 @@ export async function init(containerId) {
                     <button class="filter-btn" data-status="Completed">Completed</button>
                 </div>
 
-                <div class="sort-container" style="margin-bottom: 0;">
+                <div class="sort-container" style="margin-bottom: 0; margin-left: auto;">
                     <button class="sort-btn" id="sortToggle">
                         Sort by Date <i class="fas fa-arrow-down" id="sortIcon"></i>
                     </button>
