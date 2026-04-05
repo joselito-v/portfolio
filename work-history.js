@@ -3,7 +3,6 @@ import { db } from './firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 let historyData = [];
-let currentFilter = 'All';
 let currentStatusFilter = 'All';
 let sortDesc = true; 
 
@@ -54,8 +53,6 @@ function renderHistory() {
     grid.innerHTML = '';
 
     let processed = historyData.filter(item => {
-        const categoryMatch = currentFilter === 'All' ? true : item.category === currentFilter;
-        
         let statusMatch = true;
         const isOngoing = item.endDate && item.endDate.toLowerCase().includes('in progress');
         
@@ -65,7 +62,7 @@ function renderHistory() {
             statusMatch = !isOngoing;
         }
         
-        return categoryMatch && statusMatch;
+        return statusMatch;
     });
 
     processed.sort((a, b) => {
@@ -145,15 +142,6 @@ function renderHistory() {
 }
 
 function setupControls() {
-    document.querySelectorAll('#history-filters .filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('#history-filters .filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentFilter = e.target.getAttribute('data-filter');
-            renderHistory();
-        });
-    });
-
     document.querySelectorAll('#status-filters .filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('#status-filters .filter-btn').forEach(b => b.classList.remove('active'));
