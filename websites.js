@@ -51,7 +51,7 @@ export async function init(containerId) {
 
                 <div class="sort-container" style="margin-bottom: 0; margin-left: auto;">
                     <button class="sort-btn" id="sortToggle">
-                        Sort by Date <i class="fas fa-arrow-down" id="sortIcon"></i>
+                        Date <i class="fas fa-arrow-down" id="sortIcon"></i>
                     </button>
                 </div>
             </div>
