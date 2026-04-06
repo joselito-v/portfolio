@@ -7,7 +7,7 @@ export function init(containerId) {
             <h2>Accounting Professional, College Instructor, and Web Developer</h2>
             <div>
                 <a href="#websites" class="btn btn-primary">My Websites</a>
-                <a href="#work-history" class="btn btn-primary">My Work</a>
+                <a href="#experience" class="btn btn-primary">My Work</a>
                 <a href="#contact" class="btn btn-outline">Get in Touch</a>
             </div>
         </section>
