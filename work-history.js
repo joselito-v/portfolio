@@ -1,4 +1,4 @@
-// --- work-history.js (Work History Module) ----
+// --- work-history.js (Work History Module) ---
 import { db } from './firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
@@ -17,37 +17,41 @@ function formatBulletPoints(text) {
                         .html-content p { margin-bottom: 0.8rem; }
                         .html-content ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.8rem; }
                         .html-content ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 0.8rem; }
-                        .html-content li { margin-bottom: 0.3rem; }
-                        .html-content ul ul, .html-content ol ol, .html-content ul ol, .html-content ol ul { margin-top: 0.3rem; margin-bottom: 0; }
+                        .html-content li { margin-bottom: 0; } /* Removed gap between bullets */
+                        .html-content ul ul, .html-content ol ol, .html-content ul ol, .html-content ol ul { margin-top: 0; margin-bottom: 0; }
                     </style>
                     ${text}
                 </div>`;
     }
-    
-    // Check if there are actual newlines, if not, just format as a single paragraph but check for colon
-    if (!text.includes('\n')) {
-        const parts = text.split(':');
-        if (parts.length > 1) {
-            const boldPart = parts[0];
-            const restPart = parts.slice(1).join(':');
-            return `<p class="card-text"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</p>`;
-        }
-        return `<p class="card-text">${text}</p>`;
-    }
 
-    const array = text.split('\n').filter(line => line.trim() !== "");
-    const listItems = array.map(line => {
+    // Helper to bold text before a colon
+    const formatLine = (line) => {
         const parts = line.split(':');
         if (parts.length > 1) {
             const boldPart = parts[0];
             const restPart = parts.slice(1).join(':');
-            return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;"><strong>${boldPart.trim()}:</strong> ${restPart.trim()}</li>`;
-        } else {
-            return `<li style="margin-left: 1.5rem; margin-bottom: 0.5rem;">${line.trim()}</li>`;
+            return `<strong>${boldPart.trim()}:</strong> ${restPart.trim()}`;
         }
-    }).join('');
+        return line.trim();
+    };
+
+    const array = text.split('\n').filter(line => line.trim() !== "");
     
-    return `<ul style="margin-top: 0.5rem; color: var(--text-light); font-size: 0.95rem;">${listItems}</ul>`;
+    if (array.length === 0) return '<p class="card-text"></p>';
+
+    // If it's just a single paragraph/line
+    if (array.length === 1) {
+        return `<p class="card-text" style="color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem;">${formatLine(array[0])}</p>`;
+    }
+
+    // First paragraph becomes the header, the rest become bullets with no gap between them
+    const headerLine = array.shift();
+    const headerHtml = `<p class="card-text" style="color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0.8rem;">${formatLine(headerLine)}</p>`;
+    
+    const listItems = array.map(line => `<li style="margin-bottom: 0;">${formatLine(line)}</li>`).join('');
+    const listHtml = `<ul style="margin-left: 1.5rem; color: var(--text-light); font-size: 0.95rem;">${listItems}</ul>`;
+    
+    return `<div>${headerHtml}${listHtml}</div>`;
 }
 
 export async function init(containerId) {
@@ -124,7 +128,6 @@ function renderHistory() {
     }
 
     processed.forEach(item => {
-        // Use the new helper function for both problem and solution
         const formattedProblem = formatBulletPoints(item.problem);
         const formattedSolution = formatBulletPoints(item.solution);
 
